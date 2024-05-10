@@ -134,24 +134,66 @@ class Tree {
 
     }
 
-    inOrder(callback) {
-
+    inOrder(callback = null) {
+        const result = [];
+        const traverse = (node) => {
+            if (node !== null) {
+                traverse(node.left);
+                if (callback) {
+                    callback(node.val);
+                } else {
+                    result.push(node.val);
+                }
+                traverse(node.right);
+            }
+        };
+        traverse(this.root);
+        return result;
     }
 
-    preOrder(callback) {
-
+    preOrder(callback = null) {
+        const result = [];
+        const traverse = (node) => {
+            if (node !== null) {
+                if (callback) {
+                    callback(node.val);
+                } else {
+                    result.push(node.val);
+                }
+                traverse(node.left);
+                traverse(node.right);
+            }
+        };
+        traverse(this.root);
+        return result;
     }
 
     postOrder(callback) {
-        
+        const result = [];
+        const traverse = (node) => {
+            if (node !== null) {
+                traverse(node.left);
+                traverse(node.right);
+                if (callback) {
+                    callback(node.val);
+                } else {
+                    result.push(node.val);
+                }
+            }
+        };
+        traverse(this.root);
+        return result;
     }
 }
 
-const bst = new Tree([5, 3, 7, 2, 4, 6, 8]);
+// Example usage:
+const array = [1, 2, 3, 4, 5]; // Or any other array of values
+const tree = new Tree(array); // Pass the array to the Tree constructor
 
-// Without callback
-console.log("Level order traversal without callback:", bst.levelOrder()); // Output: [5, 3, 7, 2, 4, 6, 8]
+console.log("InOrder traversal:", tree.inOrder()); // [1, 2, 3, 4, 5]
+console.log("PreOrder traversal:", tree.preOrder()); // [1, 2, 4, 5, 3]
+console.log("PostOrder traversal:", tree.postOrder()); // [5, 4, 2, 3, 1]
 
-// With callback (printing node values)
-console.log("Level order traversal with callback (printing node values):");
-bst.levelOrder(node => console.log(node.val)); // Output: 5, 3, 7, 2, 4, 6, 8
+// Using callbacks
+console.log("InOrder traversal with callback:");
+tree.inOrder((val) => console.log(val)); // prints nodes in inOrder traversal

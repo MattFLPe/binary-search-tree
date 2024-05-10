@@ -286,3 +286,44 @@ console.log("\nAfter rebalancing:");
 console.log("InOrder traversal:", tree.inOrder()); // After rebalancing
 console.log("Is the tree balanced?", isBalanced(tree.root).balanced); // After rebalancing
 */
+
+function generateRandomNumbers(count) {
+    const numbers = [];
+    for (let i = 0; i < count; i++) {
+        numbers.push(Math.floor(Math.random() * 100));
+    }
+    return numbers;
+}
+
+// Create a binary search tree from an array of random numbers < 100
+const randomNumbers = generateRandomNumbers(10); // Generate 10 random numbers
+const tree = new Tree(randomNumbers);
+
+// Confirm that the tree is balanced by calling isBalanced
+console.log("Is the tree balanced?", isBalanced(tree.root).balanced);
+
+// Print out all elements in level, pre, post, and in order
+console.log("Level order traversal:", tree.levelOrder());
+console.log("Preorder traversal:", tree.preOrder());
+console.log("Postorder traversal:", tree.postOrder());
+console.log("Inorder traversal:", tree.inOrder());
+
+// Unbalance the tree by adding several numbers > 100
+tree.insert(105);
+tree.insert(110);
+tree.insert(115);
+
+// Confirm that the tree is unbalanced by calling isBalanced
+console.log("Is the tree balanced after adding large numbers?", isBalanced(tree.root).balanced);
+
+// Balance the tree by calling rebalance
+rebalance(tree);
+
+// Confirm that the tree is balanced by calling isBalanced
+console.log("Is the tree balanced after rebalancing?", isBalanced(tree.root).balanced);
+
+// Print out all elements in level, pre, post, and in order
+console.log("Level order traversal after rebalancing:", tree.levelOrder());
+console.log("Preorder traversal after rebalancing:", tree.preOrder());
+console.log("Postorder traversal after rebalancing:", tree.postOrder());
+console.log("Inorder traversal after rebalancing:", tree.inOrder());

@@ -96,17 +96,62 @@ class Tree {
         }
         return minVal;
     }
+
+    find(value) {
+        return this.findNode(this.root, value);
+    };
+
+    findNode(node, value) {
+        if(!node) return null;
+
+        if (value === node.val) {
+            return node;
+        } else if (value < node.val) {
+            return this.findNode(node.left, value);
+        } else {
+            return this.findNode(node.right, value);
+        }
+    }
+
+    levelOrder(callback) {
+        const result = [];
+        if (!this.root) return null;
+
+        const queue = [this.root];
+
+        while (queue.length > 0) {
+            const node = queue.shift();
+            if (callback) {
+                callback(node);
+            } else {
+                result.push(node.val);
+            }
+            if (node.left) queue.push(node.left)
+            if (node.right) queue.push(node.right)
+        }
+
+    return result;
+
+    }
+
+    inOrder(callback) {
+
+    }
+
+    preOrder(callback) {
+
+    }
+
+    postOrder(callback) {
+        
+    }
 }
 
 const bst = new Tree([5, 3, 7, 2, 4, 6, 8]);
-bst.insert(5);
-bst.insert(3);
-bst.insert(7);
-bst.insert(2);
-bst.insert(4);
-bst.insert(6);
-bst.insert(8);
 
-console.log("Before deletion:", bst.root);
-bst.deleteItem(5);
-console.log("After deletion:", bst.root);
+// Without callback
+console.log("Level order traversal without callback:", bst.levelOrder()); // Output: [5, 3, 7, 2, 4, 6, 8]
+
+// With callback (printing node values)
+console.log("Level order traversal with callback (printing node values):");
+bst.levelOrder(node => console.log(node.val)); // Output: 5, 3, 7, 2, 4, 6, 8

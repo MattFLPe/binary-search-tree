@@ -186,14 +186,103 @@ class Tree {
     }
 }
 
-// Example usage:
-const array = [1, 2, 3, 4, 5]; // Or any other array of values
-const tree = new Tree(array); // Pass the array to the Tree constructor
+function height(node) {
+    if (node === null) {
+        return -1;
+    }
 
-console.log("InOrder traversal:", tree.inOrder()); // [1, 2, 3, 4, 5]
-console.log("PreOrder traversal:", tree.preOrder()); // [1, 2, 4, 5, 3]
-console.log("PostOrder traversal:", tree.postOrder()); // [5, 4, 2, 3, 1]
+    // Recursive calls to get the height of the left and right subtrees
+    const leftHeight = height(node.left);
+    const rightHeight = height(node.right);
 
-// Using callbacks
-console.log("InOrder traversal with callback:");
-tree.inOrder((val) => console.log(val)); // prints nodes in inOrder traversal
+    // Height of the current node is the maximum height of its subtrees + 1 (to count the edge from the node to its child)
+    return Math.max(leftHeight, rightHeight) + 1;
+};
+
+function depth(node, root) {
+    // Base case: If the node is null or the root is null, its depth is 0
+    if (node === null || root === null) {
+        return 0;
+    }
+
+    // If the node is the root, its depth is 0
+    if (node === root) {
+        return 0;
+    }
+
+   // Check if the node is in the left subtree of the root
+   if (isDescendant(root.left, node)) {
+    // If it is, recursively calculate depth in the left subtree
+    return depth(node, root.left) + 1;
+}
+
+// Check if the node is in the right subtree of the root
+if (isDescendant(root.right, node)) {
+    // If it is, recursively calculate depth in the right subtree
+    return depth(node, root.right) + 1;
+}
+
+// If the node is not in either subtree, return 0 (should not happen in a binary tree)
+return 0;
+};
+
+// Helper function to check if a node is a descendant of another node
+function isDescendant(root, node) {
+    if (root === null) {
+        return false;
+    }
+    if (root === node) {
+        return true;
+    }
+    return isDescendant(root.left, node) || isDescendant(root.right, node);
+}
+
+function isBalanced(node) {
+    // Base case: If the node is null, it is balanced with height -1
+    if (node === null) {
+        return { balanced: true, height: -1 };
+    }
+
+     // Recursively get the height and balance status of the left subtree
+     const left = isBalanced(node.left);
+     if (!left.balanced) {
+         return { balanced: false, height: 0 };ss
+    }
+
+      // Recursively get the height and balance status of the right subtree
+    const right = isBalanced(node.right);
+    if (!right.balanced) {
+        return { balanced: false, height: 0 };
+    }
+
+    // Check if the height difference between left and right subtrees is more than 1
+    if (Math.abs(left.height - right.height) > 1) {
+        return { balanced: false, height: 0 };
+    }
+
+     // The tree is balanced at this node, return the height
+    return { balanced: true, height: Math.max(left.height, right.height) + 1 };
+}
+
+function rebalance(tree) {
+    // Perform an in-order traversal to collect nodes into an array
+    const nodes = [];
+    tree.inOrder((val) => nodes.push(val));
+    
+    // Rebuild the tree using the sorted array
+    tree.root = buildTree(nodes);
+} 
+
+/*
+const tree = new Tree([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+console.log("Before rebalancing:");
+console.log("InOrder traversal:", tree.inOrder()); // Before rebalancing
+console.log("Is the tree balanced?", isBalanced(tree.root).balanced); // Before rebalancing
+
+// Rebalance the tree
+rebalance(tree);
+
+console.log("\nAfter rebalancing:");
+console.log("InOrder traversal:", tree.inOrder()); // After rebalancing
+console.log("Is the tree balanced?", isBalanced(tree.root).balanced); // After rebalancing
+*/
